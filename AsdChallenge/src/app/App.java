@@ -5,10 +5,19 @@
  */
 package app;
 
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -18,16 +27,29 @@ public class App extends javax.swing.JFrame {
 
     private int contAsd;
     private int contAux;
-    private String palabra = "asd";
-
+    private String palabra;
+    private int segundos;
+    
     public App() {
         initComponents();
 
+        palabra = "asd";
+        segundos = 5;
+        
         contAsd = 0;
         contAux = 0;
         txtLog.setEditable(false);
         
         lblPalabra.setText(palabra);
+        
+//        System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
+//        
+        this.setBounds(0,0,800,600);
+        this.setLocationRelativeTo(null);
+        this.setTitle("ASD-Challenge");
+//        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+
+        initF5();
     }
 
     /**
@@ -42,39 +64,38 @@ public class App extends javax.swing.JFrame {
         txtAsd = new javax.swing.JTextField();
         lblReloj = new javax.swing.JLabel();
         lblCont = new javax.swing.JLabel();
-        btnReset = new javax.swing.JButton();
         lblPalabra = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        txtAsd.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         txtAsd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtAsdKeyReleased(evt);
             }
         });
 
-        lblReloj.setText("[SEGUNDOS]");
+        lblReloj.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        lblReloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblReloj.setText("5");
+        lblReloj.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lblCont.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
         lblCont.setForeground(new java.awt.Color(255, 0, 0));
         lblCont.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCont.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        btnReset.setText("Reset");
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
-
-        lblPalabra.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        lblPalabra.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         lblPalabra.setForeground(new java.awt.Color(0, 0, 153));
         lblPalabra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPalabra.setText("[Palabra]");
+        lblPalabra.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtLog.setContentType("text/html"); // NOI18N
         jScrollPane1.setViewportView(txtLog);
@@ -89,6 +110,14 @@ public class App extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setText("Segundos");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -101,16 +130,15 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtAsd, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
+                            .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnReset, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblReloj, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                            .addComponent(lblCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,13 +150,11 @@ public class App extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblCont, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnReset)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblReloj)
+                        .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -136,13 +162,13 @@ public class App extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtAsdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAsdKeyReleased
-        if (contAux == 0) {
+        if (contAux == 0 && !txtAsd.getText().equals("")) {
             contAux = 1;
             new Thread(new Runnable() {
 
                 @Override
                 public void run() {
-                    for (int i = 5; i > 0; i--) {
+                    for (int i = segundos; i > 0; i--) {
                         try {
                             lblReloj.setText(String.valueOf(i));
                             Thread.sleep(1000);
@@ -151,7 +177,7 @@ public class App extends javax.swing.JFrame {
                         }
                     }
 
-                    lblReloj.setText("Se terminó el tiempo!!");
+                    lblReloj.setText("F5 para reset");
                     txtAsd.setEditable(false);
 
                 }
@@ -179,21 +205,15 @@ public class App extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtAsdKeyReleased
 
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        txtLog.setText(null);
-        txtAsd.setText(null);
-        lblCont.setText(null);
-        lblReloj.setText("5");
-        txtAsd.setEditable(true);
-        contAsd = 0;
-        contAux = 0;
-        txtAsd.requestFocus();
-    }//GEN-LAST:event_btnResetActionPerformed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         palabra = JOptionPane.showInputDialog("Palabra:");
         lblPalabra.setText(palabra);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
+        lblReloj.setText(String.valueOf(segundos));
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,10 +229,10 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnReset;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCont;
     private javax.swing.JLabel lblPalabra;
@@ -220,4 +240,34 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JTextField txtAsd;
     private javax.swing.JTextPane txtLog;
     // End of variables declaration//GEN-END:variables
+
+    private void initF5() {
+        /*CON CTRL + F y f3 funciona el buscar*/
+        this.getRootPane().getInputMap(JRootPane.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "reset");
+//        this.getRootPane().getInputMap(JRootPane.WHEN_IN_FOCUSED_WINDOW)
+//                .put(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_MASK), "reset");
+//        /*CON CTRL + F y f3 funciona el buscar*/
+//
+        this.getRootPane().getActionMap().put("reset", new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtLog.requestFocus();
+                reset();
+            }
+        });
+        /*Código para escuchar a un boton para todos los componentes*/
+    }
+
+    private void reset() {
+        txtLog.setText(null);
+        txtAsd.setText(null);
+        lblCont.setText(null);
+        lblReloj.setText(String.valueOf(segundos));
+        txtAsd.setEditable(true);
+        contAsd = 0;
+        contAux = 0;
+        txtAsd.requestFocus();
+    }
 }
