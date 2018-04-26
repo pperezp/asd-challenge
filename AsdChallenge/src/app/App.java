@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;  
+import javax.swing.text.html.HTMLDocument;
 
 /**
  *
@@ -24,6 +24,7 @@ public class App extends javax.swing.JFrame {
     private String palabra;
     private int segundos;
     private HTMLDocument htmlDocument;
+    private Thread hilo;
 
     public App() {
         initComponents();
@@ -49,6 +50,8 @@ public class App extends javax.swing.JFrame {
         htmlDocument = (HTMLDocument) txtLog.getStyledDocument();
         htmlDocument.getStyleSheet().addRule(".error{color:red;}");
         reset();
+
+        hilo = null;
     }
 
     /**
@@ -175,16 +178,16 @@ public class App extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtAsdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAsdKeyReleased
-        
+
 
     }//GEN-LAST:event_txtAsdKeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         palabra = JOptionPane.showInputDialog("Palabra:");
-        
-        if(palabra == null){
+
+        if (palabra == null) {
             palabra = "asd";
-        }else if(palabra.trim().equals("")){
+        } else if (palabra.trim().equals("")) {
             palabra = "asd";
         }
         lblPalabra.setText(palabra.trim());
@@ -198,7 +201,7 @@ public class App extends javax.swing.JFrame {
     private void txtAsdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAsdKeyPressed
         if (contAux == 0 && !txtAsd.getText().equals("")) {
             contAux = 1;
-            new Thread(new Runnable() {
+            hilo = new Thread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -215,13 +218,14 @@ public class App extends javax.swing.JFrame {
                     txtAsd.setEditable(false);
 
                 }
-            }).start();
+            });
+
+            hilo.start();
         }
 
         if (txtAsd.isEditable()) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-                
-                
+
                 if (txtAsd.getText().equals(palabra)) {
                     contAsd++;
 
@@ -286,8 +290,12 @@ public class App extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtLog.requestFocus();
-                reset();
+                if (hilo != null) {
+                    if (!hilo.isAlive()) {
+                        txtLog.requestFocus();
+                        reset();
+                    }
+                }
             }
         });
         /*Código para escuchar a un boton para todos los componentes*/
