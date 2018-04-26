@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -18,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
 
 /**
  *
@@ -26,30 +29,36 @@ import javax.swing.KeyStroke;
 public class App extends javax.swing.JFrame {
 
     private int contAsd;
+    private int contError;
     private int contAux;
     private String palabra;
     private int segundos;
-    
+    private HTMLDocument htmlDocument;
+
     public App() {
         initComponents();
 
         palabra = "asd";
         segundos = 5;
-        
+
         contAsd = 0;
         contAux = 0;
+        contError = 0;
         txtLog.setEditable(false);
-        
+
         lblPalabra.setText(palabra);
-        
+
 //        System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
 //        
-        this.setBounds(0,0,800,600);
+        this.setBounds(0, 0, 800, 600);
         this.setLocationRelativeTo(null);
         this.setTitle("ASD-Challenge");
 //        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 
         initF5();
+        htmlDocument = (HTMLDocument) txtLog.getStyledDocument();
+        htmlDocument.getStyleSheet().addRule(".error{color:red;}");
+        reset();
     }
 
     /**
@@ -63,10 +72,11 @@ public class App extends javax.swing.JFrame {
 
         txtAsd = new javax.swing.JTextField();
         lblReloj = new javax.swing.JLabel();
-        lblCont = new javax.swing.JLabel();
+        lblContOK = new javax.swing.JLabel();
         lblPalabra = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextPane();
+        lblContError = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -86,10 +96,10 @@ public class App extends javax.swing.JFrame {
         lblReloj.setText("5");
         lblReloj.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        lblCont.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
-        lblCont.setForeground(new java.awt.Color(255, 0, 0));
-        lblCont.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCont.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblContOK.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
+        lblContOK.setForeground(new java.awt.Color(0, 0, 153));
+        lblContOK.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblContOK.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lblPalabra.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         lblPalabra.setForeground(new java.awt.Color(0, 0, 153));
@@ -99,6 +109,11 @@ public class App extends javax.swing.JFrame {
 
         txtLog.setContentType("text/html"); // NOI18N
         jScrollPane1.setViewportView(txtLog);
+
+        lblContError.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
+        lblContError.setForeground(new java.awt.Color(255, 0, 0));
+        lblContError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblContError.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jMenu1.setText("Cambiar");
 
@@ -135,10 +150,13 @@ public class App extends javax.swing.JFrame {
                             .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblReloj, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-                            .addComponent(lblCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblContOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,9 +168,11 @@ public class App extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblContOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -186,17 +206,26 @@ public class App extends javax.swing.JFrame {
 
         if (txtAsd.isEditable()) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                
+                
                 if (txtAsd.getText().equals(palabra)) {
                     contAsd++;
 
-                    lblCont.setText(String.valueOf(contAsd));
-                   
-                    String texto = "";
-                    for(int i=1; i<=contAsd; i++){
-                        texto += i+") "+palabra+"<br>";
+                    lblContOK.setText(String.valueOf(contAsd));
+
+                    try {
+                        htmlDocument.insertAfterEnd(htmlDocument.getCharacterElement(htmlDocument.getLength()), contAsd + ") " + palabra + "<br>");
+                    } catch (BadLocationException | IOException ex) {
+                        Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    txtLog.setText(texto);
+                } else {
+                    contError++;
+                    lblContError.setText(String.valueOf(contError));
+                    try {
+                        htmlDocument.insertAfterEnd(htmlDocument.getCharacterElement(htmlDocument.getLength()), "<span class='error'>ERROR)</span> " + txtAsd.getText() + "<br>");
+                    } catch (BadLocationException | IOException ex) {
+                        Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 txtAsd.setText(null);
                 txtAsd.requestFocus();
@@ -234,7 +263,8 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblCont;
+    private javax.swing.JLabel lblContError;
+    private javax.swing.JLabel lblContOK;
     private javax.swing.JLabel lblPalabra;
     private javax.swing.JLabel lblReloj;
     private javax.swing.JTextField txtAsd;
@@ -263,11 +293,13 @@ public class App extends javax.swing.JFrame {
     private void reset() {
         txtLog.setText(null);
         txtAsd.setText(null);
-        lblCont.setText(null);
+        lblContOK.setText("0");
+        lblContError.setText("0");
         lblReloj.setText(String.valueOf(segundos));
         txtAsd.setEditable(true);
         contAsd = 0;
         contAux = 0;
+        contError = 0;
         txtAsd.requestFocus();
     }
 }
