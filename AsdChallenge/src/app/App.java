@@ -1,26 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app;
 
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLDocument;  
 
 /**
  *
@@ -86,6 +76,9 @@ public class App extends javax.swing.JFrame {
 
         txtAsd.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         txtAsd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAsdKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtAsdKeyReleased(evt);
             }
@@ -182,6 +175,27 @@ public class App extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtAsdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAsdKeyReleased
+        
+
+    }//GEN-LAST:event_txtAsdKeyReleased
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        palabra = JOptionPane.showInputDialog("Palabra:");
+        
+        if(palabra == null){
+            palabra = "asd";
+        }else if(palabra.trim().equals("")){
+            palabra = "asd";
+        }
+        lblPalabra.setText(palabra.trim());
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
+        lblReloj.setText(String.valueOf(segundos));
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void txtAsdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAsdKeyPressed
         if (contAux == 0 && !txtAsd.getText().equals("")) {
             contAux = 1;
             new Thread(new Runnable() {
@@ -231,18 +245,7 @@ public class App extends javax.swing.JFrame {
                 txtAsd.requestFocus();
             }
         }
-
-    }//GEN-LAST:event_txtAsdKeyReleased
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        palabra = JOptionPane.showInputDialog("Palabra:");
-        lblPalabra.setText(palabra);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
-        lblReloj.setText(String.valueOf(segundos));
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_txtAsdKeyPressed
 
     /**
      * @param args the command line arguments
