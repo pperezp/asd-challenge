@@ -22,6 +22,8 @@ public class App extends javax.swing.JFrame {
     private int contAsd;
     private int contError;
     private int contAux;
+    private int contTotal;
+    
     private String palabra;
     private int segundos;
     private HTMLDocument htmlDocument;
@@ -36,6 +38,7 @@ public class App extends javax.swing.JFrame {
         contAsd = 0;
         contAux = 0;
         contError = 0;
+        contTotal = 0;
         txtLog.setEditable(false);
 
         lblPalabra.setText(palabra);
@@ -44,7 +47,7 @@ public class App extends javax.swing.JFrame {
 //        
         this.setBounds(0, 0, 800, 600);
         this.setLocationRelativeTo(null);
-        this.setTitle("ASD-Challenge");
+        this.setTitle(palabra.toUpperCase()+"-Challenge");
 //        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 
         initF5();
@@ -71,6 +74,7 @@ public class App extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLog = new javax.swing.JTextPane();
         lblContError = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -111,6 +115,11 @@ public class App extends javax.swing.JFrame {
         lblContError.setForeground(new java.awt.Color(255, 0, 0));
         lblContError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblContError.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblTotal.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(0, 204, 51));
+        lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTotal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jMenu1.setMnemonic('c');
         jMenu1.setText("Cambiar");
@@ -155,7 +164,8 @@ public class App extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblContOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,12 +179,14 @@ public class App extends javax.swing.JFrame {
                         .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblContOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -195,6 +207,8 @@ public class App extends javax.swing.JFrame {
             palabra = "asd";
         }
         lblPalabra.setText(palabra.trim());
+        
+        this.setTitle(palabra.toUpperCase()+"-Challenge");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -235,6 +249,8 @@ public class App extends javax.swing.JFrame {
 
         if (txtAsd.isEditable()) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                contTotal++;
+                lblTotal.setText(String.valueOf(contTotal));
 
                 if (txtAsd.getText().equals(palabra)) {
                     contAsd++;
@@ -284,6 +300,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JLabel lblContOK;
     private javax.swing.JLabel lblPalabra;
     private javax.swing.JLabel lblReloj;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTextField txtAsd;
     private javax.swing.JTextPane txtLog;
     // End of variables declaration//GEN-END:variables
@@ -317,11 +334,13 @@ public class App extends javax.swing.JFrame {
         txtAsd.setText(null);
         lblContOK.setText("0");
         lblContError.setText("0");
+        lblTotal.setText("0");
         lblReloj.setText(String.valueOf(segundos));
         txtAsd.setEditable(true);
         contAsd = 0;
         contAux = 0;
         contError = 0;
+        contTotal = 0;
         txtAsd.requestFocus();
     }
 }
