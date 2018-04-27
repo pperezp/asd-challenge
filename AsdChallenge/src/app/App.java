@@ -194,7 +194,11 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
+        try {
+            segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
+        } catch (Exception e) {
+            segundos = 5;
+        }
         lblReloj.setText(String.valueOf(segundos));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
