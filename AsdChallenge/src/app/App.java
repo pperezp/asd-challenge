@@ -1,5 +1,6 @@
 package app;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -111,8 +112,10 @@ public class App extends javax.swing.JFrame {
         lblContError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblContError.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jMenu1.setMnemonic('c');
         jMenu1.setText("Cambiar");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Palabra");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +124,7 @@ public class App extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Segundos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,7 +200,7 @@ public class App extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             segundos = Integer.parseInt(JOptionPane.showInputDialog(this, "Segundos:"));
-        } catch (Exception e) {
+        } catch (HeadlessException | NumberFormatException e) {
             segundos = 5;
         }
         lblReloj.setText(String.valueOf(segundos));
@@ -209,13 +213,15 @@ public class App extends javax.swing.JFrame {
 
                 @Override
                 public void run() {
-                    for (int i = segundos; i > 0; i--) {
-                        try {
+                    try {
+                        for (int i = segundos; i > 0; i--) {
+
                             lblReloj.setText(String.valueOf(i));
                             Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+
                         }
+                    } catch (InterruptedException ex) {
+                        System.out.println("Interrumpido");
                     }
 
                     lblReloj.setText("F5 para reset");
@@ -295,10 +301,11 @@ public class App extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (hilo != null) {
-                    if (!hilo.isAlive()) {
-                        txtLog.requestFocus();
-                        reset();
+                    if (hilo.isAlive()) {
+                        hilo.interrupt();
                     }
+                    txtLog.requestFocus();
+                    reset();
                 }
             }
         });
