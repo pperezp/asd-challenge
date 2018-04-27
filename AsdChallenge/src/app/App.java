@@ -18,7 +18,6 @@ import javax.swing.text.html.HTMLDocument;
  * @author prez
  */
 public class App extends javax.swing.JFrame {
-
     private int contAsd;
     private int contError;
     private int contAux;
@@ -153,19 +152,19 @@ public class App extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtAsd, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAsd)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblContOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblContOK, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblContError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))))
+                            .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -255,8 +254,6 @@ public class App extends javax.swing.JFrame {
                 if (txtAsd.getText().equals(palabra)) {
                     contAsd++;
 
-                    lblContOK.setText(String.valueOf(contAsd));
-
                     try {
                         htmlDocument.insertAfterEnd(htmlDocument.getCharacterElement(htmlDocument.getLength()), contAsd + ") " + palabra + "<br>");
                     } catch (BadLocationException | IOException ex) {
@@ -264,13 +261,16 @@ public class App extends javax.swing.JFrame {
                     }
                 } else {
                     contError++;
-                    lblContError.setText(String.valueOf(contError));
+                    
                     try {
                         htmlDocument.insertAfterEnd(htmlDocument.getCharacterElement(htmlDocument.getLength()), "<span class='error'>ERROR)</span> " + txtAsd.getText() + "<br>");
                     } catch (BadLocationException | IOException ex) {
                         Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
+                lblContOK.setText(String.valueOf(contAsd) + " ("+((contAsd*100)/contTotal)+"%)");
+                lblContError.setText(String.valueOf(contError+ " ("+((contError*100)/contTotal)+"%)"));
                 txtAsd.setText(null);
                 txtAsd.requestFocus();
             }
